@@ -542,7 +542,15 @@ AudioDeviceID getNextDeviceID(AudioDeviceID currentDeviceID, ASDeviceType typeRe
             default: 
                 break;
         }
-
+        
+        // provide compatibility with eqMac by skipping their virtual device names.
+        char nextDeviceName[256];
+        getDeviceName(dev_array[i], nextDeviceName);
+        char *lastOpenParenthesis = strrchr(nextDeviceName, '(');
+        if (strcmp(lastOpenParenthesis, "(eqMac)") == 0) {
+            continue;
+        }
+        
         if (first_dev == kAudioDeviceUnknown) {
             first_dev = dev_array[i];
         }
